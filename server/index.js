@@ -22,10 +22,19 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-app.use(cors({
-    origin:"https://academia1-backend.onrender.com",
-    credentials:true
-}));
+const allowedOrigins = ['https://academia1-frontend.onrender.com'];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
  
 // apis
 app.use("/api/v1/media", mediaRoute);
