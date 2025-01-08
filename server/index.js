@@ -36,9 +36,21 @@ app.use(cookieParser());
 
 // app.use(cors(corsOptions));
 
+const allowedOrigins = [
+  'https://academia1-backend.onrender.com', // Your frontend URL
+  'http://localhost:5173', // Local development URL (if applicable)
+];
+
 app.use(cors({
-  origin: '*', // Allow all origins (for testing)
-  credentials: true,
+  origin: (origin, callback) => {
+    // Check if the origin is in the allowed origins
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true); // Allow the request
+    } else {
+      callback(new Error('Not allowed by CORS')); // Block the request
+    }
+  },
+  credentials: true, // Enable cookies, authorization headers, etc.
 }));
 
  
